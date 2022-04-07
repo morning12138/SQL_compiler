@@ -1,9 +1,6 @@
+# 读取的sql文件路径
 path = "./test.sql"
-
-
-# 扫描器
-def scanner(text):
-    return
+text = ""
 
 
 # 读取sql文件返回字符串
@@ -13,8 +10,13 @@ def read_sql_file(path):
 
 
 # 主函数
-if __name__ == '__main__':
-    # global path
+def main():
+    global path, text, keyword
     # path = "./test.sql"
     text = read_sql_file(path)
+    print(keyword["SELECT"])
     print(text)
+
+
+if __name__ == '__main__':
+    main()
