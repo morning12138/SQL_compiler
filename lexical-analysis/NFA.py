@@ -12,19 +12,17 @@ class Node:
 
 
 class Edge:
-    def __init__(self, from_node_id, to_node_id, ch, more_info=None):
+    def __init__(self, from_node_id, to_node_id, tag):
         # from 节点
         self.fromNodeId = from_node_id
         # to 节点
         self.toNodeId = to_node_id
-        # 转化需要的字符
-        self.ch = ch
-        # 例如不是=这种信息
-        self.moreInfo = more_info
+        # 转化需要的信息
+        self.tag = tag
 
 
-# DFA状态机
-class DFA:
+# NFA状态机
+class NFA:
     def __init__(self):
         # 存放节点
         self.nodes = []
@@ -209,12 +207,12 @@ class DFA:
         self.add_edges(0, 0, " ")
         self.add_edges(0, 1, "=")
         self.add_edges(0, 2, ">")
-        self.add_edges(2, 3, "", "not =")
+        self.add_edges(2, 3, "not =")
         self.add_edges(2, 4, "=")
         self.add_edges(0, 5, "<")
-        self.add_edges(5, 6, "", "not =")
+        self.add_edges(5, 6, "not =")
         self.add_edges(5, 7, "=")
-        self.add_edges(7, 8, "", "not >")
+        self.add_edges(7, 8, "not >")
         self.add_edges(7, 9, ">")
 
     # 添加节点
@@ -223,8 +221,8 @@ class DFA:
         self.nodes.append(new_node)
 
     # 添加边
-    def add_edges(self, from_node_id, to_node_id, ch, more_info=None):
-        new_edge = Edge(from_node_id, to_node_id, ch, more_info)
+    def add_edges(self, from_node_id, to_node_id, tag):
+        new_edge = Edge(from_node_id, to_node_id, tag)
         self.edges.append(new_edge)
 
     # 将指针指向开始节点

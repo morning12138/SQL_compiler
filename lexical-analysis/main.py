@@ -1,3 +1,5 @@
+from NFA import *
+
 # 读取的sql文件路径
 path = "./test.sql"
 text = ""
@@ -14,7 +16,8 @@ def main():
     global path, text, keyword
     # path = "./test.sql"
     text = read_sql_file(path)
-    print(keyword["SELECT"])
+    new_nfa = NFA()
+    print(new_nfa)
     print(text)
 
 
