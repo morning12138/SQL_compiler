@@ -13,9 +13,13 @@ def read_sql_file(path):
 
 # 主函数
 def main():
-    nfa = NFA()
-    dfa = DFA(nfa)
-    print(dfa)
+    # nfa = NFA()
+    # dfa = DFA(nfa)
+    # print(dfa)
+    pattern = "[^\.0-9]"
+    ret = re.match(pattern, "5")
+    if ret:
+        print(ret.group())
 
 
 if __name__ == '__main__':

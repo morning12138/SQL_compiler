@@ -1,3 +1,4 @@
+
 # 定义类
 class Node:
     def __init__(self, id, is_final, is_back_off, tag):
@@ -12,11 +13,11 @@ class Node:
 
 
 # 创建一个集合
-tags = {"=", ">", "not =", "=", "<", "not >", ">", "!", "&",
-        "|", ".", "_,a-zA-Z", "_,0-9,a-zA-Z", "not _,0-9,a-zA-Z",
+tags = {"=", ">", "[^=]", "=", "<", "[^>]", ">", "!", "&",
+        "|", "[\.]", "[_a-zA-Z]", "[_0-9a-zA-Z]", "[^_0-9a-zA-Z]",
         "(", ")", ","
-        "1-9", "0-9", "not .,0-9", ".", "0-9", "not 0-9",
-        "\"", "all",
+        "[1-9]", "[0-9]", "[^\.0-9]", ".", "[^0-9]",
+        "\"", ".",# 代表匹配任何字符,除了换行
         "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
         "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
         }
@@ -28,7 +29,7 @@ class Edge:
         self.fromNodeId = from_node_id
         # to 节点 同一个tag可以去到的所有节点集合
         self.toNodeIds = to_node_id
-        # 转化需要的信息
+        # 转化需要的信息，使用正则表达式表示
         self.tag = tag
 
 
@@ -218,12 +219,12 @@ class NFA:
         self.add_edges(0, {0}, " ")
         self.add_edges(0, {1}, "=")
         self.add_edges(0, {2}, ">")
-        self.add_edges(2, {3}, "not =")
+        self.add_edges(2, {3}, "[^=]")
         self.add_edges(2, {4}, "=")
         self.add_edges(0, {5}, "<")
-        self.add_edges(5, {6}, "not =")
+        self.add_edges(5, {6}, "[^=]")
         self.add_edges(5, {7}, "=")
-        self.add_edges(7, {8}, "not >")
+        self.add_edges(7, {8}, "[^>]")
         self.add_edges(7, {9}, ">")
         self.add_edges(0, {10}, "!")
         self.add_edges(10, {11}, "=")
@@ -247,27 +248,27 @@ class NFA:
         self.add_edges(0, {21}, "X")
         self.add_edges(21, {22}, "O")
         self.add_edges(22, {23}, "R")
-        self.add_edges(0, {24}, ".")
+        self.add_edges(0, {24}, "[\.]")
 
         # 标识符
-        self.add_edges(0, {25}, "_,a-zA-Z")
-        self.add_edges(25, {25}, "_,0-9,a-zA-Z")
-        self.add_edges(25, {26}, "not _,0-9,a-zA-Z")
+        self.add_edges(0, {25}, "[_a-zA-Z]")
+        self.add_edges(25, {25}, "[_0-9a-zA-Z]")
+        self.add_edges(25, {26}, "[^_0-9a-zA-Z]")
         self.add_edges(0, {27}, "(")
         self.add_edges(0, {28}, ")")
         self.add_edges(0, {29}, ",")
 
         # int, float
-        self.add_edges(0, {30}, "1-9")
-        self.add_edges(30, {30}, "0-9")
-        self.add_edges(30, {31}, "not .,0-9")
+        self.add_edges(0, {30}, "[1-9]")
+        self.add_edges(30, {30}, "[0-9]")
+        self.add_edges(30, {31}, "[^\.0-9]")
         self.add_edges(30, {32}, ".")
-        self.add_edges(32, {32}, "0-9")
-        self.add_edges(32, {33}, "not 0-9")
+        self.add_edges(32, {32}, "[0-9]")
+        self.add_edges(32, {33}, "[^0-9]")
 
         # string
         self.add_edges(0, {34}, "\"")
-        self.add_edges(34, {34}, "all")
+        self.add_edges(34, {34}, ".")
         self.add_edges(34, {35}, "\"")
 
         # keyword
@@ -387,10 +388,6 @@ class NFA:
         self.add_edges(158, {159}, "U")
         self.add_edges(159, {160}, "L")
         self.add_edges(160, {161}, "L")
-
-
-
-
 
     # 添加节点
     def add_node(self, id, is_final, is_back_off, tag):

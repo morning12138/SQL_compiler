@@ -1,5 +1,5 @@
 from NFA import *
-
+import re
 
 class DFAEdge:
     def __init__(self, from_node_id, to_node_id: int, tag):
@@ -126,6 +126,7 @@ class DFA:
                     to_node_id = node_queue.index(move_node_set)
                     self.add_edges(point, to_node_id, tag)
             point += 1
+
     # 最小化
     def minimize(self):
         return
@@ -139,3 +140,32 @@ class DFA:
     def add_edges(self, from_node_id, to_node_id: int, tag):
         new_edge = DFAEdge(from_node_id, to_node_id, tag)
         self.edges.append(new_edge)
+
+    # 将指针指向开始节点
+    def get_start(self):
+        self.nowId = self.startId
+
+    # 是否结束
+    def is_final(self, id):
+        # 因为是按照顺序添加的节点,所以nodes的下标对应着一样的id
+        return self.nodes[id].isFinal
+
+    # 是否需要退出一个字符
+    def is_back_off(self, id):
+        return self.nodes[id].isBackOff
+
+    # 获得tag
+    def get_tag(self, id):
+        # 可以根据tag返回需要的内容
+        return self.nodes[id].tag
+
+    # 获得下一个ID
+    def next_id(self, tag):
+        for edge in self.edges:
+            if edge.fromNodeId == self.nowId and re.match(edge.tag, tag):
+                # 并将nowId指向新的位置
+                self.nowId = edge.toNodeIds
+                # 说明成功找到下一个节点
+                return True
+        return False
+
