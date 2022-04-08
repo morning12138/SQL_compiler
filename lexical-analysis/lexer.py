@@ -46,13 +46,39 @@ class Laxer:
         token_now = ""
         self.dfa.get_start()
         ID = 0
-        for i in range(0, len(text)):
+        i = 0
+        while i < len(text):
             # 需要跳过的情况
             ch = text[i]
-            if ch == "\n":
+            if token_now == "" and (ch == "\n" or ch == ' '):
                 continue
 
             token_now += ch
+            # 匹配成功到下一个节点
+            if self.dfa.get_tag(ch):
+                ID = self.dfa.nowId
+                # 判断is_final
+                if self.dfa.is_final(ID):
+                    # 判断is_back_off
+                    if self.dfa.is_back_off(ID):
+                        # 指针回退一个
+                        token_now = token_now[0:-1]
+                        i -= 1
 
+                    # 将token_now加入tokenTable
+                    # 根据token_now判断tokenType和tokenNum
+                    # ！！！暂时还没写！！！
+                    self.tokenTable.push_token(Token(token_now, "Stupid Type", 1))
+                    token_now = ""
+                    self.dfa.get_start()
+                else:
+                    i += 1
+            # 匹配失败，则抛出异常
+            else:
+                print("Lexical error: 不符合sql词法！")
+                return
 
-        pass
+        if not self.dfa.is_final(ID):
+            print("Lexical error: 最终一个词不是完整的token")
+            return
+
