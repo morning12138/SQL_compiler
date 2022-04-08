@@ -11,7 +11,6 @@ class DFAEdge:
         self.tag = tag
 
 
-
 # 初始化使用一个NFA，然后使用确定化和最小化算法
 class DFA:
     def __init__(self, nfa: NFA):
@@ -126,7 +125,7 @@ class DFA:
                     # 计算to_node_id，就是在node_queue中的index
                     to_node_id = node_queue.index(move_node_set)
                     self.add_edges(point, to_node_id, tag)
-
+            point += 1
     # 最小化
     def minimize(self):
         return

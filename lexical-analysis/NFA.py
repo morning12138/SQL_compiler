@@ -225,6 +225,172 @@ class NFA:
         self.add_edges(5, {7}, "=")
         self.add_edges(7, {8}, "not >")
         self.add_edges(7, {9}, ">")
+        self.add_edges(0, {10}, "!")
+        self.add_edges(10, {11}, "=")
+        # AND, AS, AVG, ALL
+        self.add_edges(0, {12, 51, 100, 111}, "A")
+        self.add_edges(12, {13}, "N")
+        self.add_edges(13, {14}, "D")
+        self.add_edges(51, {52}, "S")
+        self.add_edges(100, {101}, "V")
+        self.add_edges(101, {102}, "G")
+        self.add_edges(111, {112}, "L")
+        self.add_edges(112, {113}, "L")
+
+        self.add_edges(0, {15}, "&")
+        self.add_edges(15, {16}, "&")
+        self.add_edges(0, {17}, "|")
+        self.add_edges(17, {18}, "|")
+        # OR, ORDER BY
+        self.add_edges(0, {19, 136}, "O")
+        self.add_edges(19, {20}, "R")
+        self.add_edges(0, {21}, "X")
+        self.add_edges(21, {22}, "O")
+        self.add_edges(22, {23}, "R")
+        self.add_edges(0, {24}, ".")
+
+        # 标识符
+        self.add_edges(0, {25}, "_,a-zA-Z")
+        self.add_edges(25, {25}, "_,0-9,a-zA-Z")
+        self.add_edges(25, {26}, "not _,0-9,a-zA-Z")
+        self.add_edges(0, {27}, "(")
+        self.add_edges(0, {28}, ")")
+        self.add_edges(0, {29}, ",")
+
+        # int, float
+        self.add_edges(0, {30}, "1-9")
+        self.add_edges(30, {30}, "0-9")
+        self.add_edges(30, {31}, "not .,0-9")
+        self.add_edges(30, {32}, ".")
+        self.add_edges(32, {32}, "0-9")
+        self.add_edges(32, {33}, "not 0-9")
+
+        # string
+        self.add_edges(0, {34}, "\"")
+        self.add_edges(34, {34}, "all")
+        self.add_edges(34, {35}, "\"")
+
+        # keyword
+        # SELECT, SUM
+        self.add_edges(0, {36, 103}, "S")
+        self.add_edges(36, {37}, "E")
+        self.add_edges(37, {38}, "L")
+        self.add_edges(38, {39}, "E")
+        self.add_edges(39, {40}, "C")
+        self.add_edges(40, {41}, "T")
+        self.add_edges(103, {104}, "U")
+        self.add_edges(104, {105}, "M")
+        # FROM, FALSE
+        self.add_edges(0, {42, 148}, "F")
+        self.add_edges(42, {43}, "R")
+        self.add_edges(43, {44}, "O")
+        self.add_edges(44, {45}, "M")
+        self.add_edges(148, {149}, "A")
+        self.add_edges(149, {150}, "L")
+        self.add_edges(150, {151}, "S")
+        self.add_edges(151, {152}, "E")
+        # WHERE
+        self.add_edges(0, {46}, "W")
+        self.add_edges(46, {47}, "H")
+        self.add_edges(47, {48}, "E")
+        self.add_edges(48, {49}, "R")
+        self.add_edges(49, {50}, "E")
+        # INSERT, INTO, IS
+        self.add_edges(0, {53, 59, 153}, "I")
+        self.add_edges(53, {54}, "N")
+        self.add_edges(54, {55}, "S")
+        self.add_edges(55, {56}, "E")
+        self.add_edges(56, {57}, "R")
+        self.add_edges(57, {58}, "T")
+        self.add_edges(59, {60}, "N")
+        self.add_edges(60, {61}, "T")
+        self.add_edges(61, {62}, "O")
+        # VALUES
+        self.add_edges(0, {63}, "V")
+        self.add_edges(63, {64}, "A")
+        self.add_edges(64, {65}, "L")
+        self.add_edges(65, {66}, "U")
+        self.add_edges(66, {67}, "E")
+        self.add_edges(67, {68}, "S")
+        # UPDATE, UNION
+        self.add_edges(0, {69, 106}, "U")
+        self.add_edges(69, {70}, "P")
+        self.add_edges(70, {71}, "D")
+        self.add_edges(71, {72}, "A")
+        self.add_edges(72, {73}, "T")
+        self.add_edges(73, {74}, "E")
+        self.add_edges(106, {107}, "N")
+        self.add_edges(107, {108}, "I")
+        self.add_edges(108, {109}, "O")
+        self.add_edges(109, {110}, "N")
+        # DELETE, DISTINCT
+        self.add_edges(0, {75, 128}, "D")
+        self.add_edges(75, {76}, "E")
+        self.add_edges(76, {77}, "L")
+        self.add_edges(77, {78}, "E")
+        self.add_edges(78, {79}, "T")
+        self.add_edges(79, {80}, "E")
+        self.add_edges(128, {129}, "I")
+        self.add_edges(129, {130}, "S")
+        self.add_edges(130, {131}, "T")
+        self.add_edges(131, {132}, "I")
+        self.add_edges(132, {133}, "N")
+        self.add_edges(133, {134}, "C")
+        self.add_edges(134, {135}, "T")
+        # JOIN
+        self.add_edges(0, {81}, "J")
+        self.add_edges(81, {82}, "O")
+        self.add_edges(82, {83}, "I")
+        self.add_edges(83, {84}, "N")
+        # LEFT
+        self.add_edges(0, {85}, "L")
+        self.add_edges(85, {86}, "E")
+        self.add_edges(86, {87}, "F")
+        self.add_edges(87, {88}, "T")
+        # RIGHT
+        self.add_edges(0, {89}, "R")
+        self.add_edges(89, {90}, "I")
+        self.add_edges(90, {91}, "G")
+        self.add_edges(91, {92}, "H")
+        self.add_edges(92, {93}, "T")
+        # MIN, MAX
+        self.add_edges(0, {94, 97}, "M")
+        self.add_edges(94, {95}, "I")
+        self.add_edges(95, {96}, "N")
+        self.add_edges(97, {98}, "A")
+        self.add_edges(98, {99}, "X")
+        # GROUP BY
+        self.add_edges(0, {114}, "G")
+        self.add_edges(114, {115}, "R")
+        self.add_edges(115, {116}, "O")
+        self.add_edges(116, {117}, "U")
+        self.add_edges(117, {118}, "P")
+        self.add_edges(118, {119}, " ")
+        self.add_edges(119, {120}, "B")
+        self.add_edges(120, {121}, "Y")
+        # HAVING
+        self.add_edges(0, {122}, "H")
+        self.add_edges(122, {123}, "A")
+        self.add_edges(123, {124}, "V")
+        self.add_edges(124, {125}, "I")
+        self.add_edges(125, {126}, "N")
+        self.add_edges(126, {127}, "G")
+        # TRUE
+        self.add_edges(0, {144}, "T")
+        self.add_edges(144, {145}, "R")
+        self.add_edges(145, {146}, "U")
+        self.add_edges(146, {147}, "E")
+        # NOT, NULL
+        self.add_edges(0, {155, 158}, "N")
+        self.add_edges(155, {156}, "O")
+        self.add_edges(156, {157}, "T")
+        self.add_edges(158, {159}, "U")
+        self.add_edges(159, {160}, "L")
+        self.add_edges(160, {161}, "L")
+
+
+
+
 
     # 添加节点
     def add_node(self, id, is_final, is_back_off, tag):

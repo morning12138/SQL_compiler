@@ -14,11 +14,8 @@ def read_sql_file(path):
 # 主函数
 def main():
     nfa = NFA()
-    start_node = nfa.nodes[nfa.startId]
-    ans = DFA.epsilon_closure(DFA, {start_node}, nfa)
-    print(ans)
-    aowu = DFA.move(DFA, ans, nfa, "=")
-    print(aowu)
+    dfa = DFA(nfa)
+    print(dfa)
 
 
 if __name__ == '__main__':
