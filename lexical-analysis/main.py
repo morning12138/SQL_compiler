@@ -1,5 +1,5 @@
 from NFA import *
-
+from NFAtoDFA import *
 # 读取的sql文件路径
 path = "./test.sql"
 text = ""
@@ -13,12 +13,12 @@ def read_sql_file(path):
 
 # 主函数
 def main():
-    global path, text, keyword
-    # path = "./test.sql"
-    text = read_sql_file(path)
-    new_nfa = NFA()
-    print(new_nfa)
-    print(text)
+    nfa = NFA()
+    start_node = nfa.nodes[nfa.startId]
+    ans = DFA.epsilon_closure(DFA, {start_node}, nfa)
+    print(ans)
+    aowu = DFA.move(DFA, ans, nfa, "=")
+    print(aowu)
 
 
 if __name__ == '__main__':

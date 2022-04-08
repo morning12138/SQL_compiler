@@ -11,12 +11,23 @@ class Node:
         self.tag = tag
 
 
+# 创建一个集合
+tags = {"=", ">", "not =", "=", "<", "not >", ">", "!", "&",
+        "|", ".", "_,a-zA-Z", "_,0-9,a-zA-Z", "not _,0-9,a-zA-Z",
+        "(", ")", ","
+        "1-9", "0-9", "not .,0-9", ".", "0-9", "not 0-9",
+        "\"", "all",
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
+        "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+        }
+
+
 class Edge:
-    def __init__(self, from_node_id, to_node_id, tag):
+    def __init__(self, from_node_id, to_node_id: set, tag):
         # from 节点
         self.fromNodeId = from_node_id
-        # to 节点
-        self.toNodeId = to_node_id
+        # to 节点 同一个tag可以去到的所有节点集合
+        self.toNodeIds = to_node_id
         # 转化需要的信息
         self.tag = tag
 
@@ -204,16 +215,16 @@ class NFA:
 
         # 添加边的信息
         # 部分OP到 <=>为止
-        self.add_edges(0, 0, " ")
-        self.add_edges(0, 1, "=")
-        self.add_edges(0, 2, ">")
-        self.add_edges(2, 3, "not =")
-        self.add_edges(2, 4, "=")
-        self.add_edges(0, 5, "<")
-        self.add_edges(5, 6, "not =")
-        self.add_edges(5, 7, "=")
-        self.add_edges(7, 8, "not >")
-        self.add_edges(7, 9, ">")
+        self.add_edges(0, {0}, " ")
+        self.add_edges(0, {1}, "=")
+        self.add_edges(0, {2}, ">")
+        self.add_edges(2, {3}, "not =")
+        self.add_edges(2, {4}, "=")
+        self.add_edges(0, {5}, "<")
+        self.add_edges(5, {6}, "not =")
+        self.add_edges(5, {7}, "=")
+        self.add_edges(7, {8}, "not >")
+        self.add_edges(7, {9}, ">")
 
     # 添加节点
     def add_node(self, id, is_final, is_back_off, tag):
@@ -221,8 +232,8 @@ class NFA:
         self.nodes.append(new_node)
 
     # 添加边
-    def add_edges(self, from_node_id, to_node_id, tag):
-        new_edge = Edge(from_node_id, to_node_id, tag)
+    def add_edges(self, from_node_id, to_node_ids: set, tag):
+        new_edge = Edge(from_node_id, to_node_ids, tag)
         self.edges.append(new_edge)
 
     # 将指针指向开始节点
