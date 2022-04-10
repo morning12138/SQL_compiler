@@ -1,6 +1,7 @@
 from NFA import *
 import re
 
+
 class DFAEdge:
     def __init__(self, from_node_id, to_node_id: int, tag):
         # from 节点
@@ -71,7 +72,6 @@ class DFA:
         for node in node_set:
             for edge in edges:
                 # 相同tag的匹配
-                print(edge.fromNodeId, node.id, edge.tag, tag)
                 if edge.fromNodeId == node.id and edge.tag == tag:
                     for toNodeId in edge.toNodeIds:
                         if toNodeId in node_id_set:
@@ -178,4 +178,33 @@ class DFA:
                 # 说明成功找到下一个节点
                 return True
         return False
+
+    # 根据给出的token判断类型
+    def get_token_type(self, token, node_tag):
+        # KW, OP, SE, IDN, INT, FLOAT, STR
+
+        # OP, SE, INT, FLOAT,STR都可以直接判断
+        if node_tag == "OP" or node_tag == "SE" or node_tag == "INT" or node_tag == "FLOAT" or node_tag == "STR":
+            return node_tag
+        elif node_tag == "IDNorKWorOP":
+            keywords = TYPE_TO_CONTENT_DICT_KW.keys()
+            ops = TYPE_TO_CONTENT_DICT_OP.keys()
+            if token in keywords:
+                return "KW"
+            elif token in ops:
+                return "OP"
+            else:
+                return "IDN"
+
+    # 判断编号
+    def get_token_num(self, token, token_type):
+        if token_type == "IDN" or token_type == "INT" or token_type == "FLOAT" or token_type == "STR":
+            return token
+        elif token_type == "KW":
+            return TYPE_TO_CONTENT_DICT_KW[token]
+        elif token_type == "OP":
+            return TYPE_TO_CONTENT_DICT_OP[token]
+        elif token_type == "SE":
+            return TYPE_TO_CONTENT_DICT_SE[token]
+
 

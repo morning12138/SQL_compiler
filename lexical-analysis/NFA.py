@@ -23,6 +23,29 @@ tags = [" ", "=", ">", "<", "!", "&", "[^=]", "[^>]",
         ]
 
 
+TYPE_TO_CONTENT_DICT_KW = {
+    "SELECT": 1, "FROM": 2, "WHERE": 3, "AS": 4,
+    "INSERT": 5, "INTO": 6, "VALUES": 7,
+    "UPDATE": 8,
+    "DELETE": 9,
+    "JOIN": 10, "LEFT": 11, "RIGHT": 12,
+    "MIN": 13, "MAX": 14, "AVG": 15, "SUM": 16,
+    "UNION": 17, "ALL": 18,
+    "GROUP BY": 19, "HAVING": 20, "DISTINCT": 21, "ORDER BY": 22,
+    "TRUE": 23, "FALSE": 24, "IS": 25, "NOT": 26, "NULL": 27
+}
+
+TYPE_TO_CONTENT_DICT_OP = {
+    "=": 1, ">": 2, "<": 3, ">=": 4, "<=": 5, "!=": 6, "<=>": 7,
+    "AND": 8, "&&": 9, "||": 10, "OR": 11, "XOR": 12,
+    ".": 13
+}
+
+TYPE_TO_CONTENT_DICT_SE = {
+    "(": 1, ")": 2, ",": 3
+}
+
+
 class Edge:
     def __init__(self, from_node_id, to_node_id: set, tag):
         # from 节点
@@ -47,32 +70,32 @@ class NFA:
         # 初始化nodes和edges
         # OP
         self.add_node(0, 0, 0, "")
-        self.add_node(1, 1, 0, "=")
+        self.add_node(1, 1, 0, "OP")
         self.add_node(2, 0, 0, "")
-        self.add_node(3, 1, 1, ">")
-        self.add_node(4, 1, 0, ">=")
+        self.add_node(3, 1, 1, "OP")
+        self.add_node(4, 1, 0, "OP")
         self.add_node(5, 0, 0, "")
-        self.add_node(6, 1, 1, "<")
+        self.add_node(6, 1, 1, "OP")
         self.add_node(7, 0, 0, "")
-        self.add_node(8, 1, 1, "<=")
-        self.add_node(9, 1, 0, "<=>")
+        self.add_node(8, 1, 1, "OP")
+        self.add_node(9, 1, 0, "OP")
         self.add_node(10, 0, 0, "")
-        self.add_node(11, 1, 0, "!=")
+        self.add_node(11, 1, 0, "OP")
         # self.add_node(12, 0, 0, "")
         # self.add_node(13, 0, 0, "")
         # self.add_node(14, 1, 0, "AND")
         self.add_node(12, 0, 0, "")
-        self.add_node(13, 1, 0, "&&")
+        self.add_node(13, 1, 0, "OP")
         self.add_node(14, 0, 0, "")
-        self.add_node(15, 1, 0, "||")
-        self.add_node(16, 1, 0, ".")
+        self.add_node(15, 1, 0, "OP")
+        self.add_node(16, 1, 0, "OP")
         # 标识符IDN
         self.add_node(17, 0, 0, "")
-        self.add_node(18, 1, 1, "IDNorKW")
+        self.add_node(18, 1, 1, "IDNorKWorOP")
         # 界符 SE
-        self.add_node(19, 1, 0, "(")
-        self.add_node(20, 1, 0, ")")
-        self.add_node(21, 1, 0, ",")
+        self.add_node(19, 1, 0, "SE")
+        self.add_node(20, 1, 0, "SE")
+        self.add_node(21, 1, 0, "SE")
         # 整数、浮点数
         self.add_node(22, 0, 0, "")
         self.add_node(23, 1, 1, "INT")
@@ -80,7 +103,7 @@ class NFA:
         self.add_node(25, 1, 1, "FLOAT")
         # 字符串
         self.add_node(26, 0, 0, "")
-        self.add_node(27, 1, 0, "STRING")
+        self.add_node(27, 1, 0, "STR")
 
         # 添加边的信息
         # 部分OP到 <=>为止

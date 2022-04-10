@@ -3,9 +3,10 @@ from NFAtoDFA import *
 
 
 class Token:
-    def __init__(self, lexeme: str, token_type: str, token_num: int):
+    def __init__(self, lexeme: str, token_type: str, token_num: str):
         self.lexeme = lexeme
         self.tokenType = token_type
+        # 说是num，其实不是全是num，所以还是用str类型
         self.tokenNum = token_num
 
 
@@ -15,10 +16,16 @@ class TokenTable:
 
     def print_token_table(self):
         for token in self.tokens:
-            print(token.lexeme + "   " + "<" + token.tokenType + "," + token.tokenNum + ">")
+            print("{}   <{}, {}>".format(token.lexeme, token.tokenType, token.tokenNum))
 
     def push_token(self, token: Token):
         self.tokens.append(token)
+
+    def save_token_table(self, path):
+        f = open(path, "w+")
+        for token in self.tokens:
+            f.write("{}   <{}, {}>\n".format(token.lexeme, token.tokenType, token.tokenNum))
+        f.close()
 
 
 class Lexer:
@@ -69,7 +76,14 @@ class Lexer:
                     # 将token_now加入tokenTable
                     # 根据token_now判断tokenType和tokenNum
                     # ！！！暂时还没写！！！
-                    self.tokenTable.push_token(Token(token_now, "Stupid Type", 1))
+
+                    # 获得最终节点的tag
+                    node_tag = self.dfa.get_tag(ID)
+                    # 这个判断应该是dfa提供的
+                    token_type = self.dfa.get_token_type(token_now, node_tag)
+                    token_num = self.dfa.get_token_num(token_now, token_type)
+
+                    self.tokenTable.push_token(Token(token_now, token_type, token_num))
                     token_now = ""
                     self.dfa.get_start()
                 i += 1

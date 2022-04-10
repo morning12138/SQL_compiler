@@ -21,11 +21,8 @@ def main():
     token_table = TokenTable()
     lexer = Lexer(path, token_table, dfa)
     lexer.run()
-    print(lexer)
-    # pattern = "[ ]"
-    # if re.match(pattern, " "):
-    #     print("Hello")
-    # print("No")
+    lexer.tokenTable.print_token_table()
+    lexer.tokenTable.save_token_table("./output/test.txt")
 
 
 if __name__ == '__main__':
