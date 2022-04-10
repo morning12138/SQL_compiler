@@ -58,6 +58,8 @@ class DFA:
     @staticmethod
     def move(self, node_set: set, nfa: NFA, tag):
 
+        # 有些特殊的tag需要特殊对待 [_a-zA-Z]
+
         edges = nfa.edges
         # 返回的全新node集合
         new_node_set = set()
@@ -69,9 +71,9 @@ class DFA:
 
         # 遍历每一个node
         for node in node_set:
-            now_id = node.id
             for edge in edges:
-                if edge.fromNodeId == now_id and edge.tag == tag:
+                # 应该是边上的转换值有可以匹配成功tag的
+                if edge.fromNodeId == node.id and re.match(edge.tag, tag):
                     for toNodeId in edge.toNodeIds:
                         if toNodeId in node_id_set:
                             continue
@@ -80,12 +82,16 @@ class DFA:
         return new_node_set
 
     # 确定化算法
+    # 是错误的
     def determine(self, nfa: NFA):
         self.nodes = []
 
         # 先计算nfa的起始节点的闭包
         start_node = nfa.nodes[nfa.startId]
-        new_start_node_set = self.epsilon_closure(self, {start_node}, nfa)
+
+        # 压根没啥用。。
+        # new_start_node_set = self.epsilon_closure(self, {start_node}, nfa)
+        new_start_node_set = {start_node}
 
         # 初始化将初始点加入集合中
         node_queue = [new_start_node_set]
@@ -113,12 +119,17 @@ class DFA:
                     is_final = 0
                     is_back_off = 0
                     # 获得一个isFinal, isBackOff
+                    node_tag = ""
                     for one in move_node_set:
                         is_final = one.isFinal
                         is_back_off = one.isBackOff
+                        node_tag = one.tag
                         break
                     now_id += 1
-                    self.add_node(now_id, is_final, is_back_off, tag)
+                    # 这里node的tag添加错误了！
+                    # self.add_node(now_id, is_final, is_back_off, tag)
+                    # print(now_id, is_final, is_back_off, node_tag)
+                    self.add_node(now_id, is_final, is_back_off, node_tag)
                     self.add_edges(point, now_id, tag)
                 # 非空但出现过只需要连接edge
                 else:
@@ -162,7 +173,7 @@ class DFA:
     # 获得下一个ID
     def next_id(self, tag):
         for edge in self.edges:
-            if edge.fromNodeId == self.nowId and re.match(edge.tag, tag):
+            if edge.fromNodeId == self.nowId and edge.tag == tag:
                 # 并将nowId指向新的位置
                 self.nowId = edge.toNodeIds
                 # 说明成功找到下一个节点

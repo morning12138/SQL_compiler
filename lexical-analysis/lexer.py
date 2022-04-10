@@ -21,7 +21,7 @@ class TokenTable:
         self.tokens.append(token)
 
 
-class Laxer:
+class Lexer:
     def __init__(self, path: str, token_table: TokenTable, dfa: DFA):
         self.source = open(path, 'r').read()
         self.tokenTable = token_table
@@ -51,11 +51,12 @@ class Laxer:
             # 需要跳过的情况
             ch = text[i]
             if token_now == "" and (ch == "\n" or ch == ' '):
+                i += 1
                 continue
 
             token_now += ch
             # 匹配成功到下一个节点
-            if self.dfa.get_tag(ch):
+            if self.dfa.next_id(ch):
                 ID = self.dfa.nowId
                 # 判断is_final
                 if self.dfa.is_final(ID):
@@ -71,8 +72,7 @@ class Laxer:
                     self.tokenTable.push_token(Token(token_now, "Stupid Type", 1))
                     token_now = ""
                     self.dfa.get_start()
-                else:
-                    i += 1
+                i += 1
             # 匹配失败，则抛出异常
             else:
                 print("Lexical error: 不符合sql词法！")

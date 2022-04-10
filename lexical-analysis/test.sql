@@ -1,1 +1,1 @@
-SELECT LastName,FirstName FROM Persons;
+SELECT LastName FROM Persons
