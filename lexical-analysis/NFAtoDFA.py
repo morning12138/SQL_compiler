@@ -58,22 +58,21 @@ class DFA:
     @staticmethod
     def move(self, node_set: set, nfa: NFA, tag):
 
-        # 有些特殊的tag需要特殊对待 [_a-zA-Z]
-
         edges = nfa.edges
         # 返回的全新node集合
         new_node_set = set()
         # 用于判断是否已经出现过了
         node_id_set = set()
-        # 获得所有的node的id
-        for node in node_set:
-            node_id_set.add(node.id)
+        # # 获得所有的node的id
+        # for node in node_set:
+        #     node_id_set.add(node.id)
 
         # 遍历每一个node
         for node in node_set:
             for edge in edges:
-                # 应该是边上的转换值有可以匹配成功tag的
-                if edge.fromNodeId == node.id and re.match(edge.tag, tag):
+                # 相同tag的匹配
+                print(edge.fromNodeId, node.id, edge.tag, tag)
+                if edge.fromNodeId == node.id and edge.tag == tag:
                     for toNodeId in edge.toNodeIds:
                         if toNodeId in node_id_set:
                             continue
@@ -110,7 +109,7 @@ class DFA:
                 if len(move_node_set) == 0:
                     continue
                 # 非空且未出现过需要连接edge，并添加node
-                elif move_node_set not in node_queue:
+                elif not (move_node_set in node_queue):
                     # 先加入队列，用于继续计算
                     node_queue.append(move_node_set)
                     # 对DFA处理node和edges
@@ -173,7 +172,7 @@ class DFA:
     # 获得下一个ID
     def next_id(self, tag):
         for edge in self.edges:
-            if edge.fromNodeId == self.nowId and edge.tag == tag:
+            if edge.fromNodeId == self.nowId and re.match(edge.tag, tag):
                 # 并将nowId指向新的位置
                 self.nowId = edge.toNodeIds
                 # 说明成功找到下一个节点
