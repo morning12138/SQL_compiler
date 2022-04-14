@@ -19,26 +19,28 @@ tags = [" ", "=", ">", "<", "!", "&", "[^=]", "[^>]",
         "[_a-zA-Z]", "[_0-9a-zA-Z]", "[^_0-9a-zA-Z]",
         "[(]", "[)]", ",",
         "\"", ".",
-        "[1-9]", "[0-9]", "[^\.0-9]", "[^0-9]"
+        "[1-9]", "[0-9]", "[^\.0-9]", "[^0-9]",
+        "[\*]", "-", "[^!]" #新增加的
         ]
 
 
 TYPE_TO_CONTENT_DICT_KW = {
-    "SELECT": 1, "FROM": 2, "WHERE": 3, "AS": 4,
-    "INSERT": 5, "INTO": 6, "VALUES": 7,
-    "UPDATE": 8,
-    "DELETE": 9,
-    "JOIN": 10, "LEFT": 11, "RIGHT": 12,
-    "MIN": 13, "MAX": 14, "AVG": 15, "SUM": 16,
-    "UNION": 17, "ALL": 18,
-    "GROUP BY": 19, "HAVING": 20, "DISTINCT": 21, "ORDER BY": 22,
-    "TRUE": 23, "FALSE": 24, "IS": 25, "NOT": 26, "NULL": 27
+    "SELECT": 1, "FROM": 2, "WHERE": 3, "AS": 4, "*": 5,
+    "INSERT": 6, "INTO": 7, "VALUES": 8, "VALUE": 9, "DEFAULT": 10,
+    "UPDATE": 11, "SET": 12,
+    "DELETE": 13,
+    "JOIN": 14, "LEFT": 15, "RIGHT": 16, "ON": 17,
+    "MIN": 18, "MAX": 19, "AVG": 20, "SUM": 21,
+    "UNION": 22, "ALL": 23,
+    "GROUP BY": 24, "HAVING": 25, "DISTINCT": 26, "ORDER BY": 27,
+    "TRUE": 28, "FALSE": 29, "UNKNOWN": 30, "IS": 31, "NULL": 32
 }
 
 TYPE_TO_CONTENT_DICT_OP = {
     "=": 1, ">": 2, "<": 3, ">=": 4, "<=": 5, "!=": 6, "<=>": 7,
-    "AND": 8, "&&": 9, "||": 10, "OR": 11, "XOR": 12,
-    ".": 13
+    "AND": 8, "&&": 9, "OR": 10, "||": 11, "XOR": 12, "NOT": 13, "!": 14,
+    "-": 15,
+    ".": 16
 }
 
 TYPE_TO_CONTENT_DICT_SE = {
@@ -105,6 +107,11 @@ class NFA:
         self.add_node(26, 0, 0, "")
         self.add_node(27, 1, 0, "STR")
 
+        # 后续补充的节点
+        self.add_node(28, 1, 0, "IDNorKWorOP")
+        self.add_node(29, 1, 0, "OP")
+        self.add_node(30, 1, 1, "OP")
+
         # 添加边的信息
         # 部分OP到 <=>为止
         self.add_edges(0, {0}, " ")
@@ -149,6 +156,10 @@ class NFA:
         self.add_edges(26, {26}, ".")
         self.add_edges(26, {27}, "\"")
 
+        # 后续补充的边
+        self.add_edges(0, {28}, "[\*]")
+        self.add_edges(0, {29}, "-")
+        self.add_edges(10, {30}, "[^!]")
 
     # 添加节点
     def add_node(self, id, is_final, is_back_off, tag):
