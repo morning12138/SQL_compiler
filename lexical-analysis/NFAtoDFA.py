@@ -14,7 +14,7 @@ class DFAEdge:
 
 # 初始化使用一个NFA，然后使用确定化和最小化算法
 class DFA:
-    def __init__(self, nfa: NFA):
+    def __init__(self):
         # 存放节点
         self.nodes = []
         self.edges = []
@@ -24,10 +24,8 @@ class DFA:
         self.startId = 0
 
         # 确定化将NFA转化为DFA，将nodes和edges填上
-        self.determine(nfa)
+        # self.determine(nfa)
 
-        # 最小化DFA，修改nodes和edges
-        self.minimize()
 
     @staticmethod
     # e-closure计算
@@ -136,10 +134,8 @@ class DFA:
                     to_node_id = node_queue.index(move_node_set)
                     self.add_edges(point, to_node_id, tag)
             point += 1
-
-    # 最小化
-    def minimize(self):
-        return
+        # for i in self.edges:
+        #     print('fromId:'+str(i.fromNodeId)+' tag:'+str(i.tag)+' toNodeId: '+str(i.toNodeIds))
 
     # 添加节点
     def add_node(self, id, is_final, is_back_off, tag):
@@ -151,60 +147,60 @@ class DFA:
         new_edge = DFAEdge(from_node_id, to_node_id, tag)
         self.edges.append(new_edge)
 
-    # 将指针指向开始节点
-    def get_start(self):
-        self.nowId = self.startId
+    # # 将指针指向开始节点
+    # def get_start(self):
+    #     self.nowId = self.startId
 
-    # 是否结束
-    def is_final(self, id):
-        # 因为是按照顺序添加的节点,所以nodes的下标对应着一样的id
-        return self.nodes[id].isFinal
+    # # 是否结束
+    # def is_final(self, id):
+    #     # 因为是按照顺序添加的节点,所以nodes的下标对应着一样的id
+    #     return self.nodes[id].isFinal
 
-    # 是否需要退出一个字符
-    def is_back_off(self, id):
-        return self.nodes[id].isBackOff
+    # # 是否需要退出一个字符
+    # def is_back_off(self, id):
+    #     return self.nodes[id].isBackOff
 
-    # 获得tag
-    def get_tag(self, id):
-        # 可以根据tag返回需要的内容
-        return self.nodes[id].tag
+    # # 获得tag
+    # def get_tag(self, id):
+    #     # 可以根据tag返回需要的内容
+    #     return self.nodes[id].tag
 
-    # 获得下一个ID
-    def next_id(self, tag):
-        for edge in self.edges:
-            if edge.fromNodeId == self.nowId and re.match(edge.tag, tag):
-                # 并将nowId指向新的位置
-                self.nowId = edge.toNodeIds
-                # 说明成功找到下一个节点
-                return True
-        return False
+    # # 获得下一个ID
+    # def next_id(self, tag):
+    #     for edge in self.edges:
+    #         if edge.fromNodeId == self.nowId and re.match(edge.tag, tag):
+    #             # 并将nowId指向新的位置
+    #             self.nowId = edge.toNodeIds
+    #             # 说明成功找到下一个节点
+    #             return True
+    #     return False
 
     # 根据给出的token判断类型
-    def get_token_type(self, token, node_tag):
-        # KW, OP, SE, IDN, INT, FLOAT, STR
+    # def get_token_type(self, token, node_tag):
+    #     # KW, OP, SE, IDN, INT, FLOAT, STR
 
-        # OP, SE, INT, FLOAT,STR都可以直接判断
-        if node_tag == "OP" or node_tag == "SE" or node_tag == "INT" or node_tag == "FLOAT" or node_tag == "STR":
-            return node_tag
-        elif node_tag == "IDNorKWorOP":
-            keywords = TYPE_TO_CONTENT_DICT_KW.keys()
-            ops = TYPE_TO_CONTENT_DICT_OP.keys()
-            if token in keywords:
-                return "KW"
-            elif token in ops:
-                return "OP"
-            else:
-                return "IDN"
+    #     # OP, SE, INT, FLOAT,STR都可以直接判断
+    #     if node_tag == "OP" or node_tag == "SE" or node_tag == "INT" or node_tag == "FLOAT" or node_tag == "STR":
+    #         return node_tag
+    #     elif node_tag == "IDNorKWorOP":
+    #         keywords = TYPE_TO_CONTENT_DICT_KW.keys()
+    #         ops = TYPE_TO_CONTENT_DICT_OP.keys()
+    #         if token in keywords:
+    #             return "KW"
+    #         elif token in ops:
+    #             return "OP"
+    #         else:
+    #             return "IDN"
 
     # 判断编号
-    def get_token_num(self, token, token_type):
-        if token_type == "IDN" or token_type == "INT" or token_type == "FLOAT" or token_type == "STR":
-            return token
-        elif token_type == "KW":
-            return TYPE_TO_CONTENT_DICT_KW[token]
-        elif token_type == "OP":
-            return TYPE_TO_CONTENT_DICT_OP[token]
-        elif token_type == "SE":
-            return TYPE_TO_CONTENT_DICT_SE[token]
+    # def get_token_num(self, token, token_type):
+    #     if token_type == "IDN" or token_type == "INT" or token_type == "FLOAT" or token_type == "STR":
+    #         return token
+    #     elif token_type == "KW":
+    #         return TYPE_TO_CONTENT_DICT_KW[token]
+    #     elif token_type == "OP":
+    #         return TYPE_TO_CONTENT_DICT_OP[token]
+    #     elif token_type == "SE":
+    #         return TYPE_TO_CONTENT_DICT_SE[token]
 
 
