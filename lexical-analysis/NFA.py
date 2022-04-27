@@ -20,7 +20,8 @@ tags = [" ", "=", ">", "<", "!", "&", "[^=]", "[^>]",
         "[(]", "[)]", ",",
         "\"", ".",
         "[1-9]", "[0-9]", "[^\.0-9]", "[^0-9]",
-        "[\*]", "-", "[^!]" #新增加的
+        "[\*]", "-", "[^!]", #新增加的,
+        "[0]"
         ]
 
 
@@ -111,6 +112,8 @@ class NFA:
         self.add_node(28, 1, 0, "IDNorKWorOP")
         self.add_node(29, 1, 0, "OP")
         self.add_node(30, 1, 1, "OP")
+        # 0
+        self.add_node(31, 1, 0, "INT")
 
         # 添加边的信息
         # 部分OP到 <=>为止
@@ -160,6 +163,9 @@ class NFA:
         self.add_edges(0, {28}, "[\*]")
         self.add_edges(0, {29}, "-")
         self.add_edges(10, {30}, "[^!]")
+
+        # debug发现的
+        self.add_edges(0, {31}, "[0]")
 
     # 添加节点
     def add_node(self, id, is_final, is_back_off, tag):

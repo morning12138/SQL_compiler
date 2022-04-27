@@ -31,6 +31,7 @@ class TokenTable:
 class Lexer:
     def __init__(self, path: str, token_table: TokenTable, dfa: DFA):
         self.source = open(path, 'r').read()
+        self.source += " "
         self.tokenTable = token_table
         self.dfa = dfa
 
@@ -87,6 +88,8 @@ class Lexer:
             else:
                 print("Lexical error: 不符合sql词法！")
                 return
+
+        # 如果最后一个词是属于IDNorKWorOP那么也要加入token_list中
 
         if not self.dfa.is_final(ID):
             print("Lexical error: 最终一个词不是完整的token")

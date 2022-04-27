@@ -1,0 +1,7 @@
+0   <INT, 0>
+SELECT   <KW, 1>
+FROM   <KW, 2>
+HElo   <IDN, HElo>
+,   <SE, 3>
+WOldf   <IDN, WOldf>
+9021   <INT, 9021>

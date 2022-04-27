@@ -1,2 +1,2 @@
-SELECT LastName, Hello FROM Persons
-UPDATE !HELLOwOLD - mY.name * 3
+0 SELECT
+FROM HElo, WOldf 9021

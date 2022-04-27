@@ -14,7 +14,7 @@ class DFAEdge:
 
 # 初始化使用一个NFA，然后使用确定化和最小化算法
 class DFA:
-    def __init__(self, nfa: NFA):
+    def __init__(self):
         # 存放节点
         self.nodes = []
         self.edges = []
@@ -24,10 +24,8 @@ class DFA:
         self.startId = 0
 
         # 确定化将NFA转化为DFA，将nodes和edges填上
-        self.determine(nfa)
+        # self.determine(nfa)
 
-        # 最小化DFA，修改nodes和edges
-        self.minimize()
 
     @staticmethod
     # e-closure计算
@@ -134,10 +132,8 @@ class DFA:
                     to_node_id = node_queue.index(move_node_set)
                     self.add_edges(point, to_node_id, tag)
             point += 1
-
-    # 最小化
-    def minimize(self):
-        return
+        # for i in self.edges:
+        #     print('fromId:'+str(i.fromNodeId)+' tag:'+str(i.tag)+' toNodeId: '+str(i.toNodeIds))
 
     # 添加节点
     def add_node(self, id, is_final, is_back_off, tag):
