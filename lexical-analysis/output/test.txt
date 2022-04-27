@@ -1,0 +1,14 @@
+SELECT   <KW, 1>
+LastName   <IDN, LastName>
+,   <SE, 3>
+Hello   <IDN, Hello>
+FROM   <KW, 2>
+Persons   <IDN, Persons>
+UPDATE   <KW, 11>
+!   <OP, 14>
+HELLOwOLD   <IDN, HELLOwOLD>
+-   <OP, 15>
+mY   <IDN, mY>
+.   <OP, 16>
+name   <IDN, name>
+*   <KW, 5>

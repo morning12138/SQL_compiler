@@ -81,14 +81,12 @@ class DFA:
         return new_node_set
 
     # 确定化算法
-    # 是错误的
     def determine(self, nfa: NFA):
         self.nodes = []
 
         # 先计算nfa的起始节点的闭包
         start_node = nfa.nodes[nfa.startId]
 
-        # 压根没啥用。。
         # new_start_node_set = self.epsilon_closure(self, {start_node}, nfa)
         new_start_node_set = {start_node}
 

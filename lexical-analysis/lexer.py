@@ -73,10 +73,6 @@ class Lexer:
                         token_now = token_now[0:-1]
                         i -= 1
 
-                    # 将token_now加入tokenTable
-                    # 根据token_now判断tokenType和tokenNum
-                    # ！！！暂时还没写！！！
-
                     # 获得最终节点的tag
                     node_tag = self.dfa.get_tag(ID)
                     # 这个判断应该是dfa提供的
