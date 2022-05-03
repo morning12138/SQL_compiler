@@ -246,20 +246,15 @@ def get_rule_index(this_rule):
     return -1
 
 
-
-# 对输入串进行语法分析
-if __name__ == '__main__':
+def main():
     read_sql_syntax()
     get_V()
     get_first()
-
-    print_first()
-    
+    # print_first()
     get_follow()
-
+    # print_follow()
     get_table()
 
-    print_table(10,10)
 
     # 输入形式 SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
     str = input()
@@ -305,3 +300,7 @@ if __name__ == '__main__':
         else:
             print(step, rule_index, v_stack[-1] + '#' + a, 'error')
             break
+
+# 对输入串进行语法分析
+if __name__ == '__main__':
+    main()

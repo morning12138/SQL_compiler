@@ -372,52 +372,17 @@ def print_goto():
 
     print(tabulate(part_of_goto, headers=table_header, tablefmt='grid'))
 
-# 对输入串进行语法分析
-if __name__ == '__main__':
-    read_sql_syntax()
-    
+def main():
+    read_sql_syntax()  
     get_items()
     get_V()
-
     get_first()
     # print('first', first)
-
     get_standard_items()
-
     get_action()
     # print_action()
     get_goto()
     # print_goto()
-
-    print('0')
-    for i in range(len(standard_items[0])):
-        print(standard_items[0][i].left)
-        print(standard_items[0][i].right)
-
-    print('9')
-    for i in range(len(standard_items[9])):
-        print(standard_items[9][i].left)
-        print(standard_items[9][i].right)
-
-    print('21')
-    for i in range(len(standard_items[21])):
-        print(standard_items[21][i].left)
-        print(standard_items[21][i].right)
-
-    print('54')
-    for i in range(len(standard_items[54])):
-        print(standard_items[54][i].left)
-        print(standard_items[54][i].right)
-
-    print('48')
-    for i in range(len(standard_items[48])):
-        print(standard_items[48][i].left)
-        print(standard_items[48][i].right)
-
-    print('79')
-    for i in range(len(standard_items[79])):
-        print(standard_items[79][i].left)
-        print(standard_items[79][i].right)
 
     # 输入形式 SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
     str = input()
@@ -457,7 +422,6 @@ if __name__ == '__main__':
                 next_state = goto[state_stack[-1]][v_index]
                 state_stack.append(next_state)
             
-
                 print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction\n')
                 step = step + 1
             # 接受
@@ -470,6 +434,9 @@ if __name__ == '__main__':
         else:
             print(step, '/' , v_stack[-1] + '#' + a, 'error')
             break
+# 对输入串进行语法分析
+if __name__ == '__main__':
+    main()
 
 
 
