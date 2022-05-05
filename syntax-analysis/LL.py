@@ -26,12 +26,14 @@ def read_sql_syntax():
     file_obj.close()
 
     # 对lines进行处理
-    for i in range(len(rules)):
+    for i in range(len(rules)): 
         rules[i] = rules[i].split()
         rules[i].pop(0)
+    
+    rules[19] = ['groupByClause', '->', 'GROUP BY', 'expressions']
+    rules[23] = ['orderByClause', '->', 'ORDER BY', 'expressions']
 
-
-
+    
 # 划分终结符和非终结符
 def get_V():
     for rule in rules:
@@ -257,9 +259,16 @@ def main():
 
 
     # 输入形式 SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
-    str = input()
+    str = input('请输入测试串:\n')
     str = str + ' #'
     test_str = str.split(' ')
+
+    if str.find(' BY ') != -1:
+        by_index = test_str.index('BY')
+        test_str[by_index - 1] = test_str[by_index - 1] + ' BY'
+        test_str.pop(by_index)
+    
+
 
     state_stack.append(0)
     v_stack.append('#')
@@ -285,8 +294,11 @@ def main():
                 vn_index = get_v_index(v_stack[-1], 2)
                 rule_index = table[vn_index][vt_index]
                 rule = rules[rule_index - 1][:]
-
-                print(step, rule_index, v_stack[-1] + '#' + a, 'reduction')
+                
+                if a != '#':
+                    print(step, rule_index, v_stack[-1] + '#' + a, 'reduction')
+                else:
+                    print(step, rule_index, v_stack[-1] + '#', 'reduction')
                 step = step + 1
 
                 v_stack.pop()
