@@ -40,8 +40,10 @@ v_stack = [] # 符号栈
 def read_sql_syntax()
 # 划分终结符和非终结符
 def get_V()
+
 # 检测规则是否为A->$的形式
 def in_empty_rule(this_vn)
+
 # 初始化、构造及输出first集
 def init_first()
 def get_first()
@@ -61,6 +63,40 @@ def get_v_index(this_v, FLAG)
 def get_rule_index(this_rule)
 
 ```
+##### 1.1.3 main函数
+1. 依次调用函数`read_sql_syntax()`读取sql语法、`get_V()`划分终结符集和非终结符集、`get_first()`构造first集、`get_follow()`构造follow集、`get_table`构造table分析表。
+2. 输入分析串，例如：
+```sql
+SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
+```
+3. 初始化`test_str`分析串（在输入串后加#并进行预处理）。初始化`v_stack`符号栈，即将`# root`进栈。初始化`state_stack`状态栈，即将`0`进栈。
+4. 从左依次编历`test_str`分析串，每次取`a = test_str[0]`直至`test_str == None`:
+* `a`不是终极符，终止循环，输入串不符合语法规则，输出`error`。
+* `a`是终结符，`a`等于`v_stack[-1]`且`a`为`#`，则输入串符合语法规则，输出`accept`。
+* `a`是终结符，`a`等于`v_stack[-1]`且`a`不为`#`，则对`a`进行移入，输出`move`。
+```python
+    v_stack.pop()
+    test_str.pop(0)
+```
+* `a`是终结符，`a`不等于`v_stack[-1]`，则查找分析表`table`进行规约，输出`reduction`。注意：所用规约的语法规则`rule`中的`$`不需`push`符号栈。
+```python
+    rule = []
+    vt_index = get_v_index(a, 1)
+    vn_index = get_v_index(v_stack[-1], 2)
+    rule_index = table[vn_index][vt_index]
+    rule = rules[rule_index - 1][:]
+
+    print(step, rule_index, v_stack[-1] + '#' + a, 'reduction')
+    step = step + 1
+
+    v_stack.pop()
+    
+    for i in range(len(rule) - 2):
+        tmp = rule[len(rule) - i - 1][:]
+        if tmp != '$':
+            v_stack.append(tmp)
+```
+
 
 ### 2 LR(1)
 
@@ -105,6 +141,7 @@ v_stack = [] # 符号栈
 def read_sql_syntax()
 # 划分终结符和非终结符
 def get_V()
+
 # 检测规则是否为A->$的形式
 def in_empty_rule(this_vn)
 # 初始化、构造及输出first集
@@ -142,7 +179,46 @@ def get_v_index(this_v, FLAG)
 def get_rule_index(this_rule)
 ```
 
+##### 2.1.3 main函数
+1. 依次调用函数`read_sql_syntax()`读取sql语法、`get_V()`划分终结符集和非终结符集、 `get_items()`构造文法项目、`get_first()`构造first集、`get_standard_items()`构造项目集规范族、`get_action`构造action分析表、`get_goto`构造goto分析表。
+2. 输入分析串，例如：
+```sql
+SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
+```
+3. 初始化`test_str`分析串（在输入串后加#并进行预处理）。初始化`v_stack`符号栈，即将`# root`进栈。初始化`state_stack`状态栈，即将`0`进栈。
+4. 从左依次编历`test_str`分析串，每次取`a = test_str[0]`直至`test_str == None`:
+* `a`不是终极符，终止循环，输入串不符合语法规则，输出`error`。
+* `a`是终结符，获取`a`的终结符索引`a_index`,通过`action`分析表得到该执行的动作`act`。
+```python
+    a_index = get_v_index(a, 1)
+    act = action[state_stack[-1]][a_index]
+```
+* 如果`act == 'acc'`，即则输入串符合语法规则，输出`accept`。
+* 如果`act[0] == 's'`，即为移进动作，将当前符号`a`进符号栈，将`int(act[1:])`进状态栈，输出`move`。
+```python
+    test_str.pop(0)
+    state_stack.append(int(act[1:]))
+    print(step, '/', v_stack[-1] + '#' + a, 'move')
+    v_stack.append(a)
+    step = step + 1
+```
+* 如果`act[0] == 'r'`，即为规约动作，先将状态栈前规约后符号数`len(rules[int(act[1:]) - 1]) - 2`个状态移出，`$`不需将状态移出。将符号栈栈顶移出，将规约后的符号`next_v`进栈。将`next_state = goto[state_stack[-1]][v_index]`进状态栈。
+```python
+    if rules[int(act[1:]) - 1][-1] != '$' or len(rules[int(act[1:]) - 1]) != 3:
+        for j in range(len(rules[int(act[1:]) - 1]) - 2):
+            state_stack.pop()
+            
+    v_stack.pop()
+    next_v = rules[int(act[1:]) - 1][0]
+    v_stack.append(next_v)              
+    v_index = get_v_index(v_stack[-1], 2)       
+    next_state = goto[state_stack[-1]][v_index]
+    state_stack.append(next_state)
+
+    print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction')
+                step = step + 1
+```
 
 
 * 注意通过A->$规约时，不需要pop状态栈顶
-* 通过规则规约时，pop数 = 规约符号数
+* 通过规则规约时，pop状态栈顶数 = 规约符号数

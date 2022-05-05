@@ -271,15 +271,13 @@ def main():
 
         if a in VT:
             if a == v_stack[-1] and a != '#':
-
                 print(step, '/', v_stack[-1] + '#' + a, 'move')
                 step = step + 1
-
                 v_stack.pop()
                 test_str.pop(0)
 
             elif a == v_stack[-1] and a == '#':
-                print(step, rule_index, v_stack[-1] + '#' + a, 'accept')
+                print(step, '/', '#', 'accept')
                 break
             else:
                 rule = []

@@ -398,9 +398,7 @@ def main():
 
         if a in VT:
             a_index = get_v_index(a, 1)
-            print('a', a)
             act = action[state_stack[-1]][a_index]
-            print(act)
             # 移进
             if act[0] == 's':
                 test_str.pop(0)
@@ -422,7 +420,7 @@ def main():
                 next_state = goto[state_stack[-1]][v_index]
                 state_stack.append(next_state)
             
-                print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction\n')
+                print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction')
                 step = step + 1
             # 接受
             elif act == 'acc':
