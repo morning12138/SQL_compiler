@@ -257,8 +257,10 @@ def main():
     # print_follow()
     get_table()
 
-
     # 输入形式 SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
+    result_file = input('请输入输出结果文件名称：\n')
+    result = open(result_file, 'w')
+
     str = input('请输入测试串:\n')
     str = str + ' #'
     test_str = str.split(' ')
@@ -268,8 +270,6 @@ def main():
         test_str[by_index - 1] = test_str[by_index - 1] + ' BY'
         test_str.pop(by_index)
     
-
-
     state_stack.append(0)
     v_stack.append('#')
     v_stack.append('root')
@@ -279,15 +279,17 @@ def main():
         a = test_str[0][:]
 
         if a in VT:
+            # 移进
             if a == v_stack[-1] and a != '#':
-                print(step, '/', v_stack[-1] + '#' + a, 'move')
+                print(step, '/', v_stack[-1] + '#' + a, 'move', file = result)
                 step = step + 1
                 v_stack.pop()
                 test_str.pop(0)
-
+            # 接受
             elif a == v_stack[-1] and a == '#':
-                print(step, '/', '#', 'accept')
+                print(step, '/', '#', 'accept', end="", file = result)
                 break
+            # 规约
             else:
                 rule = []
                 vt_index = get_v_index(a, 1)
@@ -296,19 +298,18 @@ def main():
                 rule = rules[rule_index - 1][:]
                 
                 if a != '#':
-                    print(step, rule_index, v_stack[-1] + '#' + a, 'reduction')
+                    print(step, rule_index, v_stack[-1] + '#' + a, 'reduction', file = result)
                 else:
-                    print(step, rule_index, v_stack[-1] + '#', 'reduction')
+                    print(step, rule_index, v_stack[-1] + '#', 'reduction', file = result)
                 step = step + 1
 
                 v_stack.pop()
-                
                 for i in range(len(rule) - 2):
                     tmp = rule[len(rule) - i - 1][:]
                     if tmp != '$':
                         v_stack.append(tmp)               
         else:
-            print(step, rule_index, v_stack[-1] + '#' + a, 'error')
+            print(step, rule_index, v_stack[-1] + '#' + a, 'error', file = result)
             break
 
 # 对输入串进行语法分析

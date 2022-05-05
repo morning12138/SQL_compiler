@@ -376,6 +376,7 @@ def print_goto():
     print(tabulate(part_of_goto, headers=table_header, tablefmt='grid'))
 
 def main():
+
     read_sql_syntax()  
     get_items()
     get_V()
@@ -388,6 +389,9 @@ def main():
     # print_goto()
 
     # 输入形式 SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
+    result_file = input('请输入输出结果文件名称：\n')
+    result = open(result_file, 'w')
+
     str = input('请输入测试串:\n')
     str = str + ' #'
     test_str = str.split(' ')
@@ -396,6 +400,7 @@ def main():
         by_index = test_str.index('BY')
         test_str[by_index - 1] = test_str[by_index - 1] + ' BY'
         test_str.pop(by_index)
+    
 
     state_stack.append(0)
     v_stack.append('#')
@@ -411,7 +416,8 @@ def main():
             if act[0] == 's':
                 test_str.pop(0)
                 state_stack.append(int(act[1:]))
-                print(step, '/', v_stack[-1] + '#' + a, 'move')
+                print(step, '/', v_stack[-1] + '#' + a, 'move', file = result)
+
                 v_stack.append(a)
                 step = step + 1
             # 规约
@@ -427,20 +433,21 @@ def main():
                 v_index = get_v_index(v_stack[-1], 2)       
                 next_state = goto[state_stack[-1]][v_index]
                 state_stack.append(next_state)
+                
                 if a != '#':
-                    print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction')
+                    print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction', file = result)
                 else:
-                    print(step, int(act[1:]), v_stack[-1] + '#', 'reduction')
+                    print(step, int(act[1:]), v_stack[-1] + '#', 'reduction', file = result)
                 step = step + 1
             # 接受
             elif act == 'acc':
-                print(step, '1', v_stack[-1] + '#', 'accept')
+                print(step, '1', v_stack[-1] + '#', 'accept', end="", file = result)
                 break
             else:
-                print(step, '/' , v_stack[-1] + '#' + a, 'error')
+                print(step, '/' , v_stack[-1] + '#' + a, 'error', file = result)
                 break
         else:
-            print(step, '/' , v_stack[-1] + '#' + a, 'error')
+            print(step, '/' , v_stack[-1] + '#' + a, 'error', file = result)
             break
 # 对输入串进行语法分析
 if __name__ == '__main__':
