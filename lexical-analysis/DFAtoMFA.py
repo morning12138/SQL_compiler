@@ -56,7 +56,7 @@ class DFAtoMFA: #DFA最小化
                     finalNoBackNodesSE.append(i.id)
                 if i.tag == 'IDNorKWorOP':
                     finalNoBackNodesID.append(i.id)
-                if i.tag == 'STR':
+                if i.tag == 'STRING':
                     finalNoBackNodesSTR.append(i.id)
             
             if i.isFinal == 0:
@@ -208,7 +208,7 @@ class DFAtoMFA: #DFA最小化
         # KW, OP, SE, IDN, INT, FLOAT, STR
 
         # OP, SE, INT, FLOAT,STR都可以直接判断
-        if node_tag == "OP" or node_tag == "SE" or node_tag == "INT" or node_tag == "FLOAT" or node_tag == "STR":
+        if node_tag == "OP" or node_tag == "SE" or node_tag == "INT" or node_tag == "FLOAT" or node_tag == "STRING":
             return node_tag
         elif node_tag == "IDNorKWorOP":
             keywords = TYPE_TO_CONTENT_DICT_KW.keys()
@@ -222,7 +222,7 @@ class DFAtoMFA: #DFA最小化
 
     # 判断编号
     def get_token_num(self, token, token_type):
-        if token_type == "IDN" or token_type == "INT" or token_type == "FLOAT" or token_type == "STR":
+        if token_type == "IDN" or token_type == "INT" or token_type == "FLOAT" or token_type == "STRING":
             return token
         elif token_type == "KW":
             return TYPE_TO_CONTENT_DICT_KW[token]
