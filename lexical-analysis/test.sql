@@ -1,2 +1,2 @@
-0 SELECT
-FROM HElo, WOldf 9021
+GROUP BY name
+ORDER BY fefe
