@@ -47,6 +47,9 @@ def read_sql_syntax():
     for i in range(len(rules)):
         rules[i] = rules[i].split()
         rules[i].pop(0)
+    
+    rules[19] = ['groupByClause', '->', 'GROUP BY', 'expressions']
+    rules[23] = ['orderByClause', '->', 'ORDER BY', 'expressions']
 
 def init_first():
     for vn_index in range(len(VN)):
@@ -385,9 +388,14 @@ def main():
     # print_goto()
 
     # 输入形式 SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
-    str = input()
+    str = input('请输入测试串:\n')
     str = str + ' #'
     test_str = str.split(' ')
+
+    if str.find(' BY ') != -1:
+        by_index = test_str.index('BY')
+        test_str[by_index - 1] = test_str[by_index - 1] + ' BY'
+        test_str.pop(by_index)
 
     state_stack.append(0)
     v_stack.append('#')
@@ -419,12 +427,14 @@ def main():
                 v_index = get_v_index(v_stack[-1], 2)       
                 next_state = goto[state_stack[-1]][v_index]
                 state_stack.append(next_state)
-            
-                print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction')
+                if a != '#':
+                    print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction')
+                else:
+                    print(step, int(act[1:]), v_stack[-1] + '#', 'reduction')
                 step = step + 1
             # 接受
             elif act == 'acc':
-                print(step, '1', v_stack[-1] + '#' + a, 'accept')
+                print(step, '1', v_stack[-1] + '#', 'accept')
                 break
             else:
                 print(step, '/' , v_stack[-1] + '#' + a, 'error')
