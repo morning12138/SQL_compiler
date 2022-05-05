@@ -222,8 +222,10 @@ class DFAtoMFA: #DFA最小化
 
     # 判断编号
     def get_token_num(self, token, token_type):
-        if token_type == "IDN" or token_type == "INT" or token_type == "FLOAT" or token_type == "STRING":
+        if token_type == "IDN" or token_type == "INT" or token_type == "FLOAT":
             return token
+        if token_type == "STRING":
+            return token[1:-1]
         elif token_type == "KW":
             return TYPE_TO_CONTENT_DICT_KW[token]
         elif token_type == "OP":
