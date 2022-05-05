@@ -106,7 +106,7 @@ class NFA:
         self.add_node(25, 1, 1, "FLOAT")
         # 字符串
         self.add_node(26, 0, 0, "")
-        self.add_node(27, 1, 0, "STR")
+        self.add_node(27, 1, 0, "STRING")
 
         # 后续补充的节点
         self.add_node(28, 1, 0, "IDNorKWorOP")

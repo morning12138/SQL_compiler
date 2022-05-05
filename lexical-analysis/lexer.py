@@ -16,7 +16,7 @@ class TokenTable:
 
     def print_token_table(self):
         for token in self.tokens:
-            print("{}   <{}, {}>".format(token.lexeme, token.tokenType, token.tokenNum))
+            print("{}   <{},{}>".format(token.lexeme, token.tokenType, token.tokenNum))
 
     def push_token(self, token: Token):
         self.tokens.append(token)
@@ -24,7 +24,7 @@ class TokenTable:
     def save_token_table(self, path):
         f = open(path, "w+")
         for token in self.tokens:
-            f.write("{}   <{}, {}>\n".format(token.lexeme, token.tokenType, token.tokenNum))
+            f.write("{}   <{},{}>\n".format(token.lexeme, token.tokenType, token.tokenNum))
         f.close()
 
 
@@ -60,6 +60,12 @@ class Lexer:
             ch = text[i]
             if token_now == "" and (ch == "\n" or ch == ' '):
                 i += 1
+                continue
+
+            # GROUP BY和ORDER BY特殊处理
+            if token_now == "GROUP" or token_now == "ORDER":
+                i += 1
+                token_now += " "
                 continue
 
             token_now += ch
