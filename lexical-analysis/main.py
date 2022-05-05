@@ -4,7 +4,7 @@ from lexer import *
 from DFAtoMFA import *
 
 # 读取的sql文件路径
-path = "./test0A.sql"
+path = "./test0B.sql"
 text = ""
 
 
