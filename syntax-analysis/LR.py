@@ -375,6 +375,35 @@ def print_goto():
 
     print(tabulate(part_of_goto, headers=table_header, tablefmt='grid'))
 
+def read_lex_result(lex_file):
+    global test_str
+    with open(lex_file, encoding='utf-8') as file_obj:
+        lex_results = file_obj.readlines()
+    file_obj.close()
+    
+    sql_words = []
+
+    for i in range(len(lex_results)): 
+        sql_word = {}
+        line = lex_results[i].split('\t')
+        comma_index = line[1].find(',')
+        sql_word['word'] = line[0][:]
+        sql_word['type'] = line[1][1:comma_index]
+        sql_words.append(sql_word)
+    
+    for j in range(len(sql_words)):
+        if sql_words[j]['type'] == 'IDN' or sql_words[j]['type'] == 'INT' or sql_words[j]['type'] == 'FLOAT' or sql_words[j]['type'] == 'STRING':
+            test_str.append(sql_words[j]['type'])
+        elif sql_words[j]['word'] == 'GROUP' or sql_words[j]['word'] == 'ORDER':
+            test_str.append(sql_words[j]['word'] + 'BY')
+        elif sql_words[j]['word'] == 'BY':
+            pass
+        else:
+            test_str.append(sql_words[j]['word'])
+
+    test_str.append('#')
+
+
 def main():
 
     read_sql_syntax()  
@@ -388,19 +417,11 @@ def main():
     get_goto()
     # print_goto()
 
-    # 输入形式 SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
     result_file = input('请输入输出结果文件名称：\n')
     result = open(result_file, 'w')
-
-    str = input('请输入测试串:\n')
-    str = str + ' #'
-    test_str = str.split(' ')
-
-    if str.find(' BY ') != -1:
-        by_index = test_str.index('BY')
-        test_str[by_index - 1] = test_str[by_index - 1] + ' BY'
-        test_str.pop(by_index)
     
+    lex_file = input('请输入词法分析结果文件名称：\n')
+    read_lex_result(lex_file)
 
     state_stack.append(0)
     v_stack.append('#')

@@ -1,0 +1,11 @@
+INSERT	<KW,6>
+INTO	<KW,7>
+_tb1	<IDN,_tb1>
+VALUES	<KW,8>
+(	<SE,1>
+1	<INT,1>
+,	<SE,3>
+1.78	<FLOAT,1.78>
+,	<SE,3>
+"SELECT"	<STRING,SELECT>
+)	<SE,2>
