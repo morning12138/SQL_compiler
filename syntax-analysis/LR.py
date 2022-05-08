@@ -437,7 +437,7 @@ def main():
             if act[0] == 's':
                 test_str.pop(0)
                 state_stack.append(int(act[1:]))
-                print(step, '/', v_stack[-1] + '#' + a, 'move', file = result)
+                print("{}\t/\t{}#{}\tmove".format(step, v_stack[-1], a), file = result)
 
                 v_stack.append(a)
                 step = step + 1
@@ -456,19 +456,19 @@ def main():
                 state_stack.append(next_state)
                 
                 if a != '#':
-                    print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction', file = result)
+                    print("{}\t{}\t{}#{}\treduction".format(step, int(act[1:]), v_stack[-1], a), file = result)
                 else:
-                    print(step, int(act[1:]), v_stack[-1] + '#', 'reduction', file = result)
+                    print("{}\t{}\t{}#\treduction".format(step, int(act[1:]), v_stack[-1]), file = result)
                 step = step + 1
             # 接受
             elif act == 'acc':
-                print(step, '1', v_stack[-1] + '#', 'accept', end="", file = result)
+                print("{}\t1\t{}#\taccept".format(step, v_stack[-1]), end="", file = result)
                 break
             else:
-                print(step, '/' , v_stack[-1] + '#' + a, 'error', file = result)
+                print("{}\t/\t{}#{}\terror".format(step, v_stack[-1], a), file = result)
                 break
         else:
-            print(step, '/' , v_stack[-1] + '#' + a, 'error', file = result)
+            print("{}\t/\t{}#{}\terror".format(step, v_stack[-1], a), file = result)
             break
 # 对输入串进行语法分析
 if __name__ == '__main__':

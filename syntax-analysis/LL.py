@@ -302,13 +302,13 @@ def main():
         if a in VT:
             # 移进
             if a == v_stack[-1] and a != '#':
-                print(step, '/', v_stack[-1] + '#' + a, 'move', file = result)
+                print("{}\t/\t{}#{}\tmove".format(step, v_stack[-1], a), file = result)
                 step = step + 1
                 v_stack.pop()
                 test_str.pop(0)
             # 接受
             elif a == v_stack[-1] and a == '#':
-                print(step, '/', '#', 'accept', end="", file = result)
+                print("{}\t/\t#\taccept".format(step), end="", file = result)
                 break
             # 规约
             else:
@@ -319,9 +319,9 @@ def main():
                 rule = rules[rule_index - 1][:]
                 
                 if a != '#':
-                    print(step, rule_index, v_stack[-1] + '#' + a, 'reduction', file = result)
+                    print("{}\t{}\t{}#{}\treduction".format(step, rule_index, v_stack[-1], a), file = result)
                 else:
-                    print(step, rule_index, v_stack[-1] + '#', 'reduction', file = result)
+                    print("{}\t{}\t{}#\treduction".format(step, rule_index, v_stack[-1]), file = result)
                 step = step + 1
 
                 v_stack.pop()
@@ -330,7 +330,7 @@ def main():
                     if tmp != '$':
                         v_stack.append(tmp)               
         else:
-            print(step, rule_index, v_stack[-1] + '#' + a, 'error', file = result)
+            print("{}\t{}\t{}#{}\terror".format(step, rule_index, v_stack[-1], a), file = result)
             break
 
 # 对输入串进行语法分析
