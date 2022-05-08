@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/SQL_compiler.iml" filepath="$PROJECT_DIR$/.idea/SQL_compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/syntax-analysis.iml" filepath="$PROJECT_DIR$/.idea/syntax-analysis.iml" />
     </modules>
   </component>
 </project>
