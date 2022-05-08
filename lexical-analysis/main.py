@@ -4,7 +4,7 @@ from lexer import *
 from DFAtoMFA import *
 
 # 读取的sql文件路径
-path = "./test0B.sql"
+path = "./input/test0B.sql"
 text = ""
 
 
@@ -29,7 +29,7 @@ def main():
     lexer = Lexer(path, token_table, mfa)
     lexer.run()
     lexer.tokenTable.print_token_table()
-    lexer.tokenTable.save_token_table("./test.txt")
+    lexer.tokenTable.save_token_table("./output/13Blex.tsv")
 
 
 if __name__ == '__main__':

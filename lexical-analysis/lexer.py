@@ -24,7 +24,10 @@ class TokenTable:
     def save_token_table(self, path):
         f = open(path, "w+")
         for token in self.tokens:
-            f.write("{}   <{},{}>\n".format(token.lexeme, token.tokenType, token.tokenNum))
+            if token != self.tokens[-1]:
+                f.write("{}   <{},{}>\n".format(token.lexeme, token.tokenType, token.tokenNum))
+            else:
+                f.write("{}   <{},{}>".format(token.lexeme, token.tokenType, token.tokenNum))
         f.close()
 
 

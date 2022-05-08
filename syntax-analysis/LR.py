@@ -418,10 +418,10 @@ def main():
     # print_goto()
 
     result_file = input('请输入输出结果文件名称：\n')
-    result = open(result_file, 'w')
-    
+    result = open('./output/'+ result_file, 'w')
+
     lex_file = input('请输入词法分析结果文件名称：\n')
-    read_lex_result(lex_file)
+    read_lex_result('./input/' + lex_file)
 
     state_stack.append(0)
     v_stack.append('#')
