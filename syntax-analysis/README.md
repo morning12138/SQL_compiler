@@ -86,11 +86,13 @@ SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
     rule_index = table[vn_index][vt_index]
     rule = rules[rule_index - 1][:]
 
-    print(step, rule_index, v_stack[-1] + '#' + a, 'reduction')
+    if a != '#':
+        print("{}\t{}\t{}#{}\treduction".format(step, rule_index, v_stack[-1], a), file = result)
+    else:
+        print("{}\t{}\t{}#\treduction".format(step, rule_index, v_stack[-1]), file = result)
     step = step + 1
 
     v_stack.pop()
-    
     for i in range(len(rule) - 2):
         tmp = rule[len(rule) - i - 1][:]
         if tmp != '$':
@@ -198,7 +200,7 @@ SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
 ```python
     test_str.pop(0)
     state_stack.append(int(act[1:]))
-    print(step, '/', v_stack[-1] + '#' + a, 'move')
+    print("{}\t/\t{}#{}\tmove".format(step, v_stack[-1], a), file = result)
     v_stack.append(a)
     step = step + 1
 ```
@@ -215,8 +217,11 @@ SELECT IDN . IDN FROM IDN WHERE IDN . IDN > INT
     next_state = goto[state_stack[-1]][v_index]
     state_stack.append(next_state)
 
-    print(step, int(act[1:]), v_stack[-1] + '#' + a, 'reduction')
-                step = step + 1
+    if a != '#':
+        print("{}\t{}\t{}#{}\treduction".format(step, int(act[1:]), v_stack[-1], a), file = result)
+    else:
+        print("{}\t{}\t{}#\treduction".format(step, int(act[1:]), v_stack[-1]), file = result)
+    step = step + 1
 ```
 
 
